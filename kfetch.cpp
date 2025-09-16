@@ -436,8 +436,8 @@ private:
     void getPackages() {
     int count = 0;
     std::string manager;
-    
-    // FreeBSD pkg detection first
+
+    // FreeBSD pkg detection
     if (system("which pkg > /dev/null 2>&1") == 0) {
         std::string result = executeCommand("pkg info -a 2>/dev/null | wc -l");
         if (!result.empty()) {
@@ -445,46 +445,64 @@ private:
             manager = "pkg";
         }
     }
-    // Try different package managers
+    // Debian/Ubuntu
     else if (std::ifstream("/var/lib/dpkg/status").good()) {
-        std::string cmd = "dpkg-query -f '${binary:Package}\\n' -W 2>/dev/null | wc -l";
-        std::string result = executeCommand(cmd);
+        std::string result = executeCommand("dpkg-query -f '${binary:Package}\\n' -W 2>/dev/null | wc -l");
         if (!result.empty()) {
             count = std::stoi(result);
             manager = "dpkg";
         }
-    } else if (std::ifstream("/var/lib/rpm").good()) {
+    }
+    // RPM-based
+    else if (std::ifstream("/var/lib/rpm").good()) {
         std::string result = executeCommand("rpm -qa 2>/dev/null | wc -l");
         if (!result.empty()) {
             count = std::stoi(result);
             manager = "rpm";
         }
-    } else if (system("which pacman > /dev/null 2>&1") == 0) {
+    }
+    // Arch / Pacman
+    else if (system("which pacman > /dev/null 2>&1") == 0) {
         std::string result = executeCommand("pacman -Q 2>/dev/null | wc -l");
         if (!result.empty()) {
             count = std::stoi(result);
             manager = "pacman";
         }
-    } else if (system("which emerge > /dev/null 2>&1") == 0) {
+    }
+    // Gentoo / Portage
+    else if (system("which emerge > /dev/null 2>&1") == 0) {
         std::string result = executeCommand("qlist -I 2>/dev/null | wc -l");
         if (!result.empty()) {
             count = std::stoi(result);
             manager = "portage";
         }
-    } else if (system("which xbps-query > /dev/null 2>&1") == 0) {
+    }
+    // Void / XBPS
+    else if (system("which xbps-query > /dev/null 2>&1") == 0) {
         std::string result = executeCommand("xbps-query -l 2>/dev/null | wc -l");
         if (!result.empty()) {
             count = std::stoi(result);
             manager = "xbps";
         }
-    } else if (system("which apk > /dev/null 2>&1") == 0) {
+    }
+    // Alpine / APK
+    else if (system("which apk > /dev/null 2>&1") == 0) {
         std::string result = executeCommand("apk list --installed 2>/dev/null | wc -l");
         if (!result.empty()) {
             count = std::stoi(result);
             manager = "apk";
         }
     }
-    
+    // OpenBSD
+    else if (system("which pkg_info > /dev/null 2>&1") == 0) {
+        // Lightweight: count dirs in /var/db/pkg
+        std::string result = executeCommand("ls /var/db/pkg | wc -l");
+        if (!result.empty()) {
+            count = std::stoi(result);
+            manager = "pkg_info";
+        }
+    }
+
     if (count > 0) {
         std::stringstream ss;
         ss << count << " (" << manager << ")";
@@ -492,7 +510,7 @@ private:
     } else {
         packages = "Unknown";
     }
-}    
+}
     
 public:
     SystemInfo(int argc = 0, char* argv[] = nullptr) {

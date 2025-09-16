@@ -296,27 +296,206 @@ private:
     }
     
     void getTerminal() {
-        const char* term = std::getenv("TERM_PROGRAM");
-        if (term) {
-            terminal = std::string(term);
+    terminal.clear();
+    
+    // Environment variables to check (in order of reliability)
+    const char* term_program = std::getenv("TERM_PROGRAM");
+    const char* term_program_version = std::getenv("TERM_PROGRAM_VERSION");
+    const char* konsole_dbus_service = std::getenv("KONSOLE_DBUS_SERVICE");
+    const char* konsole_profile = std::getenv("KONSOLE_PROFILE");
+    const char* vte_version = std::getenv("VTE_VERSION");
+    const char* gnome_terminal_service = std::getenv("GNOME_TERMINAL_SERVICE");
+    const char* gnome_terminal_screen = std::getenv("GNOME_TERMINAL_SCREEN");
+    const char* kitty_window_id = std::getenv("KITTY_WINDOW_ID");
+    const char* alacritty_socket = std::getenv("ALACRITTY_SOCKET");
+    const char* wezterm_unix_socket = std::getenv("WEZTERM_UNIX_SOCKET");
+    const char* term_env = std::getenv("TERM");
+    const char* colorterm = std::getenv("COLORTERM");
+    const char* tmux = std::getenv("TMUX");
+    const char* tmux_pane = std::getenv("TMUX_PANE");
+    
+    // Check for tmux/screen first (multiplexers)
+    if (tmux || tmux_pane) {
+        terminal = "tmux";
+        return;
+    }
+    
+    // Check specific terminal indicators (most reliable)
+    if (kitty_window_id) {
+        terminal = "Kitty";
+        return;
+    }
+    
+    if (alacritty_socket) {
+        terminal = "Alacritty";
+        return;
+    }
+    
+    if (wezterm_unix_socket) {
+        terminal = "WezTerm";
+        return;
+    }
+    
+    // Check TERM_PROGRAM (macOS and some others)
+    if (term_program) {
+        std::string prog = std::string(term_program);
+        std::transform(prog.begin(), prog.end(), prog.begin(), ::tolower);
+        
+        if (prog.find("iterm") != std::string::npos) {
+            terminal = "iTerm2";
+        } else if (prog.find("terminal") != std::string::npos) {
+            terminal = "Terminal.app";
+        } else if (prog.find("hyper") != std::string::npos) {
+            terminal = "Hyper";
+        } else if (prog.find("tabby") != std::string::npos) {
+            terminal = "Tabby";
         } else {
-            // Try to detect from parent process
-            std::string ppid = executeCommand("ps -o ppid= -p $$");
-            if (!ppid.empty()) {
-                std::string parent = executeCommand("ps -o comm= -p " + ppid);
-                if (!parent.empty()) {
-                    terminal = parent;
+            terminal = std::string(term_program);
+        }
+        return;
+    }
+    
+    // Check KDE Konsole
+    if (konsole_dbus_service || konsole_profile) {
+        terminal = "Konsole";
+        return;
+    }
+    
+    // Check GNOME Terminal
+    if (gnome_terminal_service || gnome_terminal_screen) {
+        terminal = "GNOME Terminal";
+        return;
+    }
+    
+    // Check VTE-based terminals
+    if (vte_version) {
+        // Could be GNOME Terminal, XFCE Terminal, etc.
+        // Try to be more specific if possible
+        if (std::getenv("XFCE4_PANEL_PLUGIN_ID")) {
+            terminal = "XFCE Terminal";
+        } else if (std::getenv("MATE_DESKTOP_SESSION_ID")) {
+            terminal = "MATE Terminal";
+        } else {
+            terminal = "VTE-based Terminal";
+        }
+        return;
+    }
+    
+    // Parse TERM variable more carefully
+    if (term_env) {
+        std::string t = std::string(term_env);
+        std::transform(t.begin(), t.end(), t.begin(), ::tolower);
+        
+        if (t.find("kitty") != std::string::npos) {
+            terminal = "Kitty";
+        } else if (t.find("alacritty") != std::string::npos) {
+            terminal = "Alacritty";
+        } else if (t.find("foot") != std::string::npos) {
+            terminal = "foot";
+        } else if (t.find("st-") != std::string::npos || t == "st") {
+            terminal = "st (suckless terminal)";
+        } else if (t.find("urxvt") != std::string::npos) {
+            terminal = "rxvt-unicode";
+        } else if (t.find("rxvt") != std::string::npos) {
+            terminal = "rxvt";
+        } else if (t.find("xterm") != std::string::npos) {
+            terminal = "xterm";
+        } else if (t.find("screen") != std::string::npos) {
+            terminal = "GNU Screen";
+        } else if (t.find("linux") != std::string::npos) {
+            terminal = "Linux Console";
+        } else {
+            terminal = t;
+        }
+        return;
+    }
+    
+    // Check COLORTERM as another fallback
+    if (colorterm) {
+        std::string ct = std::string(colorterm);
+        if (ct == "gnome-terminal") {
+            terminal = "GNOME Terminal";
+        } else if (ct == "xfce4-terminal") {
+            terminal = "XFCE Terminal";
+        } else if (ct == "truecolor" || ct == "24bit") {
+            // Generic truecolor support, try process detection
+            terminal = ""; // Will fall through to process detection
+        } else {
+            terminal = ct;
+        }
+        if (!terminal.empty()) return;
+    }
+    
+    // Enhanced process detection fallback
+    if (terminal.empty()) {
+        // Get current process info
+        std::string pid = executeCommand("echo $$");
+        if (!pid.empty()) {
+            pid.erase(pid.find_last_not_of(" \n\r\t") + 1); // trim
+            
+            // Try to find the terminal emulator in the process tree
+            std::string pstree_cmd = "pstree -p " + pid + " | head -1";
+            std::string process_tree = executeCommand(pstree_cmd);
+            
+            if (!process_tree.empty()) {
+                // Extract terminal names from process tree
+                if (process_tree.find("kitty") != std::string::npos) {
+                    terminal = "Kitty";
+                } else if (process_tree.find("alacritty") != std::string::npos) {
+                    terminal = "Alacritty";
+                } else if (process_tree.find("wezterm") != std::string::npos) {
+                    terminal = "WezTerm";
+                } else if (process_tree.find("gnome-terminal") != std::string::npos) {
+                    terminal = "GNOME Terminal";
+                } else if (process_tree.find("konsole") != std::string::npos) {
+                    terminal = "Konsole";
+                } else if (process_tree.find("xfce4-terminal") != std::string::npos) {
+                    terminal = "XFCE Terminal";
+                } else if (process_tree.find("foot") != std::string::npos) {
+                    terminal = "foot";
+                } else if (process_tree.find("st") != std::string::npos) {
+                    terminal = "st";
+                } else if (process_tree.find("urxvt") != std::string::npos) {
+                    terminal = "rxvt-unicode";
+                } else if (process_tree.find("xterm") != std::string::npos) {
+                    terminal = "xterm";
                 }
             }
             
+            // If pstree failed, try alternative approach
             if (terminal.empty()) {
-                term = std::getenv("TERM");
-                if (term) {
-                    terminal = std::string(term);
+                std::string ppid_cmd = "ps -o ppid= -p " + pid;
+                std::string ppid = executeCommand(ppid_cmd);
+                if (!ppid.empty()) {
+                    ppid.erase(ppid.find_last_not_of(" \n\r\t") + 1);
+                    
+                    std::string parent_cmd = "ps -o comm= -p " + ppid;
+                    std::string parent = executeCommand(parent_cmd);
+                    if (!parent.empty()) {
+                        parent.erase(parent.find_last_not_of(" \n\r\t") + 1);
+                        
+                        // Filter out non-terminal processes
+                        if (parent != "bash" && parent != "zsh" && parent != "fish" && 
+                            parent != "sh" && parent != "dash" && parent != "kfetch" &&
+                            parent != "systemd" && parent != "init") {
+                            terminal = parent;
+                        }
+                    }
                 }
             }
         }
     }
+    
+    // Final fallback
+    if (terminal.empty()) {
+        terminal = "Unknown";
+    }
+    
+    // Capitalize first letter for consistency
+    if (!terminal.empty() && terminal != "Unknown") {
+        terminal[0] = std::toupper(terminal[0]);
+    }
+}
     
     void getCPU() {
 #ifdef __linux__

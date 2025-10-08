@@ -1,0 +1,68 @@
+# kfetch
+
+**kfetch** is a system information tool written in Rust. It displays your system details in a ASCII art layout, with color highlighting for the distribution.
+
+## Features
+
+- Detects Linux distribution and shows corresponding ASCII art.
+- Displays system information:
+  - Username and hostname
+  - Operating system
+  - Kernel version
+  - Uptime
+  - Shell
+  - Window manager (WM)
+  - Memory usage
+
+## Supported Distributions
+
+- NixOS
+- Arch Linux
+- Arco Linux
+- Artix Linux
+- Debian
+- EndeavourOS
+- Fedora
+- Gentoo
+- Linux Mint
+- Manjaro
+- OpenSUSE
+- Slackware
+- Ubuntu
+- Void Linux
+
+*(Other distributions will default to a generic ASCII art such as TUX.)*
+
+## Installation
+
+1. Ensure you have [Rust](https://www.rust-lang.org/tools/install) installed.
+2. Clone the repository:
+
+```bash
+git clone https://github.com/0x16000/kfetch.git
+cd kfetch
+```
+
+3. Build the project:
+
+```bash
+cargo build --release
+```
+
+4. Run the tool:
+
+```bash
+cargo run
+```
+
+Or, run the compiled binary from `target/release/kfetch`.
+
+## Usage
+
+Simply execute kfetch. It will automatically detect your Linux distribution and print system information next to the ASCII art.
+```bash
+./target/release/kfetch
+```
+
+Example:
+<img width="496" height="267" alt="Image" src="https://github.com/user-attachments/assets/1bb13e50-b934-427b-a92e-f00f0f512bb6" />

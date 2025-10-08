@@ -1,6 +1,9 @@
 use std::fs;
 use std::{env, path::Path};
 
+mod r#config;
+use config::load_config;
+
 mod r#mod;
 use r#mod::{nixos, arch, arco, artix, debian, endeavour, fedora, gentoo, mint, manjaro, opensuse, slackware, ubuntu, void, linux};
 
@@ -110,7 +113,14 @@ fn memory() -> Option<String> {
 }
 
 fn main() {
-    let distro_name = os().unwrap_or("Unknown".into());
+    let config = load_config();
+
+    let distro_name = if let Some(cfg_distro) = &config.distro_override {
+        cfg_distro.clone()
+    } else {
+        os().unwrap_or("Unknown".into())
+    };
+
     let distro_ascii = get_distro_ascii(&distro_name);
 
     let info_lines = vec![

@@ -73,7 +73,7 @@ mkdir -p .config/kfetch/ && vim .config/kfetch/kfetch.conf
 
 To modify write:
 ```bash
-distro=Arch (or whatever else is supported
+distro=Arch (or whatever else is supported)
 ```
 
 Example:

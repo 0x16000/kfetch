@@ -64,5 +64,17 @@ Simply execute kfetch. It will automatically detect your Linux distribution and 
 ./target/release/kfetch
 ```
 
+## Configuration
+
+Right now, you can only set to modify the ASCII Art of kfetch, do so by running these commands:
+```bash
+mkdir -p .config/kfetch/ && vim .config/kfetch/kfetch.conf
+```
+
+To modify write:
+```bash
+distro=Arch (or whatever else is supported
+```
+
 Example:
 <img width="496" height="267" alt="Image" src="https://github.com/user-attachments/assets/1bb13e50-b934-427b-a92e-f00f0f512bb6" />

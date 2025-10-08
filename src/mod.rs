@@ -211,3 +211,18 @@ pub fn void() -> Distro {
         color: "\x1b[32m",
     }
 }
+
+pub fn linux() -> Distro {
+    Distro {
+        ascii: vec![
+            "    .--.",
+            "   |o_o |",
+            "   |:_/ |",
+            "  //   \\ \\",
+            " (|     | )",
+            "/'\\_   _/`\\",
+            "\\___)=(___/",
+        ],
+        color: "\x1b[33m",
+    }
+}

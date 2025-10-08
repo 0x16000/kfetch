@@ -2,7 +2,7 @@ use std::fs;
 use std::{env, path::Path};
 
 mod r#mod;
-use r#mod::{nixos, arch, arco, artix, debian, endeavour, fedora, gentoo, mint, manjaro, opensuse, slackware, ubuntu, void};
+use r#mod::{nixos, arch, arco, artix, debian, endeavour, fedora, gentoo, mint, manjaro, opensuse, slackware, ubuntu, void, linux};
 
 fn get_distro_ascii(distro: &str) -> r#mod::Distro {
     match distro.to_lowercase().as_str() {
@@ -20,7 +20,7 @@ fn get_distro_ascii(distro: &str) -> r#mod::Distro {
         "slackware" => slackware(),
         "ubuntu" => ubuntu(),
         "void linux" | "void" => void(),
-        &_ => todo!(),
+        &_ => linux(),
     }
 }
 

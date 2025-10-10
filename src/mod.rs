@@ -212,6 +212,20 @@ pub fn void() -> Distro {
     }
 }
 
+pub fn raspbian() -> Distro {
+    Distro {
+        ascii: vec![
+            "              __  __",
+            "             (_\\)(/_)",
+            "             (_(__)_)",
+            "            (_(_)(_)_)",
+            "             (_(__)_)",
+            "               (__)",
+        ],
+        color: "\x1b[38;5;125m",
+    }
+}
+
 pub fn linux() -> Distro {
     Distro {
         ascii: vec![

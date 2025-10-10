@@ -5,7 +5,7 @@ mod r#config;
 use config::load_config;
 
 mod r#mod;
-use r#mod::{nixos, arch, arco, artix, debian, endeavour, fedora, gentoo, mint, manjaro, opensuse, slackware, ubuntu, void, linux};
+use r#mod::{nixos, arch, arco, artix, debian, endeavour, fedora, gentoo, mint, manjaro, opensuse, slackware, ubuntu, void, linux, raspbian};
 
 fn get_distro_ascii(distro: &str) -> r#mod::Distro {
     match distro.to_lowercase().as_str() {
@@ -23,6 +23,7 @@ fn get_distro_ascii(distro: &str) -> r#mod::Distro {
         "slackware" => slackware(),
         "ubuntu" => ubuntu(),
         "void linux" | "void" => void(),
+        "raspbian" | "raspberry pi os" => raspbian(),
         &_ => linux(),
     }
 }

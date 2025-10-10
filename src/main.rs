@@ -124,13 +124,13 @@ fn main() {
     let distro_ascii = get_distro_ascii(&distro_name);
 
     let info_lines = vec![
-    	format!("{}{}{}\x1b[0m", distro_ascii.color, "User:", "\x1b[37m ".to_string() + &user_at_host()),
-    	format!("{}{}{}\x1b[0m", distro_ascii.color, "OS:", "\x1b[37m ".to_string() + &distro_name),
-    	format!("{}{}{}\x1b[0m", distro_ascii.color, "Kernel:", "\x1b[37m ".to_string() + &kernel().unwrap_or("Unknown".into())),
-    	format!("{}{}{}\x1b[0m", distro_ascii.color, "Uptime:", "\x1b[37m ".to_string() + &uptime().unwrap_or("Unknown".into())),
-    	format!("{}{}{}\x1b[0m", distro_ascii.color, "Shell:", "\x1b[37m ".to_string() + &shell().unwrap_or("Unknown".into())),
-    	format!("{}{}{}\x1b[0m", distro_ascii.color, "WM:", "\x1b[37m ".to_string() + &wm().unwrap_or("Unknown".into())),
-        format!("{}{}{}\x1b[0m", distro_ascii.color, "Memory:", "\x1b[37m ".to_string() + &memory().unwrap_or("Unknown".into())),
+    	format!("{}{}{}\x1b[0m", distro_ascii.color, "User:", "\x1b[97m ".to_string() + &user_at_host()),
+    	format!("{}{}{}\x1b[0m", distro_ascii.color, "OS:", "\x1b[97m ".to_string() + &distro_name),
+    	format!("{}{}{}\x1b[0m", distro_ascii.color, "Kernel:", "\x1b[97m ".to_string() + &kernel().unwrap_or("Unknown".into())),
+    	format!("{}{}{}\x1b[0m", distro_ascii.color, "Uptime:", "\x1b[97m ".to_string() + &uptime().unwrap_or("Unknown".into())),
+    	format!("{}{}{}\x1b[0m", distro_ascii.color, "Shell:", "\x1b[97m ".to_string() + &shell().unwrap_or("Unknown".into())),
+    	format!("{}{}{}\x1b[0m", distro_ascii.color, "WM:", "\x1b[97m ".to_string() + &wm().unwrap_or("Unknown".into())),
+        format!("{}{}{}\x1b[0m", distro_ascii.color, "Memory:", "\x1b[97m ".to_string() + &memory().unwrap_or("Unknown".into())),
     ];
 
     let ascii_lines = &distro_ascii.ascii;

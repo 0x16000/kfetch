@@ -30,6 +30,7 @@
 - Slackware
 - Ubuntu
 - Void Linux
+- Raspbian
 
 *(Other distributions will default to a generic ASCII art such as TUX.)*
 

@@ -5,10 +5,11 @@ mod r#config;
 use config::load_config;
 
 mod r#mod;
-use r#mod::{nixos, arch, arco, artix, debian, endeavour, fedora, gentoo, mint, manjaro, opensuse, slackware, ubuntu, void, linux, raspbian};
+use r#mod::{nixos, arch, arco, artix, debian, endeavour, fedora, gentoo, mint, manjaro, opensuse, slackware, ubuntu, void, linux, raspbian, cachyos};
 
 fn get_distro_ascii(distro: &str) -> r#mod::Distro {
     match distro.to_lowercase().as_str() {
+        "cachyos" => cachyos(),
         "nixos" => nixos(),
         "arch linux" | "arch" => arch(),
         "arco linux" | "arco" => arco(),

@@ -9,7 +9,7 @@ use r#mod::{nixos, arch, arco, artix, debian, endeavour, fedora, gentoo, mint, m
 
 fn get_distro_ascii(distro: &str) -> r#mod::Distro {
     match distro.to_lowercase().as_str() {
-        "cachyos" => cachyos(),
+        "cachyos" | "cachyos linux" => cachyos(),
         "nixos" => nixos(),
         "arch linux" | "arch" => arch(),
         "arco linux" | "arco" => arco(),

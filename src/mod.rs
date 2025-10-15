@@ -3,6 +3,22 @@ pub struct Distro {
     pub color: &'static str,
 }
 
+pub fn cachyos() -> Distro {
+	Distro {
+	ascii: vec![
+            "   /''''''''''''/   ",
+            "  /''''''''''''/    ",
+            " /''''''/           ",
+            "/''''''/            ",
+            "\\......\\            ",
+            " \\......\\           ",
+            "  \\.............../  ",
+            "   \\............./   ",
+        ],
+		color: "\x1b[36m"
+	}
+}
+
 pub fn nixos() -> Distro {
     Distro {
 	ascii: vec![

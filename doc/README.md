@@ -16,6 +16,7 @@
 
 ## Supported Distributions
 
+- CachyOS
 - NixOS
 - Arch Linux
 - Arco Linux
@@ -63,6 +64,13 @@ Or, run the compiled binary from `target/release/kfetch`.
 Simply execute kfetch. It will automatically detect your Linux distribution and print system information next to the ASCII art.
 ```bash
 ./target/release/kfetch
+```
+
+## Install
+
+Installing kfetch is straightforward simply run
+```bash
+make install
 ```
 
 ## Configuration

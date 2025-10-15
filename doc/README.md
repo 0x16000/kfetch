@@ -86,4 +86,4 @@ distro=Arch (or whatever else is supported)
 ```
 
 Example:
-<img width="496" height="267" alt="Image" src="https://github.com/user-attachments/assets/1bb13e50-b934-427b-a92e-f00f0f512bb6" />
+<img width="587" height="343" alt="Image" src="https://github.com/user-attachments/assets/fe0a7f60-6713-4f0f-9aa2-d22a9b8cb34e" />

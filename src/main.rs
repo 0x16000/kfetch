@@ -1,5 +1,6 @@
 use std::fs;
 use std::{env, path::Path};
+use std::process::Command;
 
 mod r#config;
 use config::load_config;
@@ -78,13 +79,65 @@ fn shell() -> Option<String> {
         }
     }
     None
-}
+  }
 
 fn wm() -> Option<String> {
-    env::var("XDG_CURRENT_DESKTOP")
-        .or_else(|_| env::var("DESKTOP_SESSION"))
-        .or_else(|_| env::var("GDMSESSION"))
-        .ok()
+    if let Ok(wm) = env::var("XDG_CURRENT_DESKTOP") {
+        return Some(wm);
+    }
+
+    if let Ok(wm) = env::var("DESKTOP_SESSION") {
+        return Some(wm);
+    }
+
+    if let Ok(wm) = env::var("GDMSESSION") {
+        return Some(wm);
+    }
+
+    if env::var("DISPLAY").is_ok() {
+        if let Ok(output) = Command::new("xprop")
+            .args(["-root", "-notype", "_NET_SUPPORTING_WM_CHECK"])
+            .output()
+        {
+        if output.status.success() {
+            if let Some(wm_id) = String::from_utf8_lossy(&output.stdout)
+                .split_whitespace()
+                    .last()
+            {
+                if let Ok(name_output) = Command::new("xprop")
+                    .args(["-id", wm_id, "-notype", "_NET_WM_NAME"])
+                    .output()
+                {
+                    if name_output.status.success() {
+                        let name = String::from_utf8_lossy(&name_output.stdout);
+                        if let Some(wm_name) = name.split('"').nth(1) {
+                            return Some(wm_name.to_string());
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+if env::var("WAYLAND_DISPLAY").is_ok() {
+    if let Ok(output) = Command::new("ps").args(["-e"]).output() {
+        let processes = String::from_utf8_lossy(&output.stdout);
+
+        let compositors = [
+            "sway", "hyprland", "wayfire", "river", "dwl",
+            "labwc", "cage", "kwin_wayland", "gnome-shell",
+            "weston", "mutter"
+        ];
+
+        for compositor in &compositors {
+            if processes.lines().any(|line| line.contains(compositor)) {
+                return Some(compositor.to_string());
+            }
+        }
+    }
+}
+    None
 }
 
 fn memory() -> Option<String> {

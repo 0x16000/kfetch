@@ -8,6 +8,7 @@ mod colors {
     pub const ARCH_BLUE: &str = "\x1b[38;2;23;147;209m";
     pub const DEBIAN_RED: &str = "\x1b[38;2;206;0;86m";
     pub const ENDEAVOUR_PURPLE: &str = "\x1b[38;2;144;129;187m";
+    pub const ELEMENTARY_BLUE: &str = "\x1b[38;2;79;89;191m";
     pub const FEDORA_BLUE: &str = "\x1b[38;2;11;87;164m";
     pub const MAGENTA: &str = "\x1b[35m";
     pub const MINT_GREEN: &str = "\x1b[38;2;134;190;67m";
@@ -94,6 +95,19 @@ pub fn artix() -> Distro {
     )
 }
 
+pub fn centos() -> Distro {
+    distro!(
+        colors::UBUNTU_ORANGE,
+        "         ____^____         ",
+        "         |\\  |  /|         ",
+        "         | \\ | / |         ",
+        "        <------ --->       ",
+        "         | / | \\ |         ",
+        "         |/__|__\\|         ",
+        "             v             ",
+    )
+}
+
 pub fn debian() -> Distro {
     distro!(
         colors::DEBIAN_RED,
@@ -115,6 +129,18 @@ pub fn endeavour() -> Distro {
         "  / /     _) )   ",
         " /_/___-- __-    ",
         "  /____--        ",
+    )
+}
+
+pub fn elementary() -> Distro {
+    distro!(
+        colors::ELEMENTARY_BLUE,
+        "   _______      ",
+        "  / ____  \\     ",
+        " /  |  /  /\\    ",
+        " |__\\ /  / |    ",
+        " \\   /__/  /    ",
+        "  \\_______/     ",
     )
 }
 
@@ -232,19 +258,6 @@ pub fn raspbian() -> Distro {
         "        (_(_)(_)_)",
         "         (_(__)_)",
         "           (__)",
-    )
-}
-
-pub fn centos() -> Distro {
-    distro!(
-        colors::UBUNTU_ORANGE,
-        "         ____^____         ",
-        "         |\\  |  /|         ",
-        "         | \\ | / |         ",
-        "        <------ --->       ",
-        "         | / | \\ |         ",
-        "         |/__|__\\|         ",
-        "             v             ",
     )
 }
 

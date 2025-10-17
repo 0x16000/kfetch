@@ -21,8 +21,10 @@
 - Arch Linux
 - Arco Linux
 - Artix Linux
+- CentOS
 - Debian
 - EndeavourOS
+- ElementaryOS
 - Fedora
 - Gentoo
 - Linux Mint
@@ -32,7 +34,6 @@
 - Ubuntu
 - Void Linux
 - Raspbian
-- CentOS
 
 *(Other distributions will default to a generic ASCII art such as TUX.)*
 

@@ -7,8 +7,8 @@ use config::load_config;
 
 mod r#mod;
 use r#mod::{
-    arch, arco, artix, cachyos, debian, endeavour, fedora, gentoo, linux, 
-    manjaro, mint, nixos, opensuse, raspbian, slackware, ubuntu, void, centos, Distro
+    arch, arco, artix, centos, cachyos, debian, elementary, endeavour, fedora, gentoo, linux, 
+    manjaro, mint, nixos, opensuse, raspbian, slackware, ubuntu, void, Distro
 };
 
 const RESET: &str = "\x1b[0m";
@@ -64,6 +64,7 @@ fn get_distro_ascii(distro: &str) -> Distro {
         "artix linux" | "artix" => artix(),
         "debian" => debian(),
         "endeavour linux" | "endeavour" | "endeavouros" => endeavour(),
+        "elementary linux" | "elementary" | "elementaryos" => elementary(),
         "fedora" | "fedora linux" => fedora(),
         "gentoo" | "gentoo linux" => gentoo(),
         "linux mint" | "mint" => mint(),

@@ -192,6 +192,7 @@ fn detect_wayland_compositor() -> Option<String> {
         "weston",
         "mutter",
         "niri",
+        "hikari",
     ];
 
     COMPOSITORS

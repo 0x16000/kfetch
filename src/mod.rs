@@ -235,6 +235,19 @@ pub fn raspbian() -> Distro {
     )
 }
 
+pub fn centos() -> Distro {
+    distro!(
+        colors::UBUNTU_ORANGE,
+        "             ____^____         ",
+        "             |\\  |  /|         ",
+        "             | \\ | / |         ",
+        "            <------ --->       ",
+        "             | / | \\ |         ",
+        "             |/__|__\\|         ",
+        "                 v             ",
+    )
+}
+
 pub fn linux() -> Distro {
     distro!(
         colors::YELLOW,

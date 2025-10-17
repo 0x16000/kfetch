@@ -8,7 +8,7 @@ use config::load_config;
 mod r#mod;
 use r#mod::{
     arch, arco, artix, cachyos, debian, endeavour, fedora, gentoo, linux, 
-    manjaro, mint, nixos, opensuse, raspbian, slackware, ubuntu, void, Distro
+    manjaro, mint, nixos, opensuse, raspbian, slackware, ubuntu, void, centos, Distro
 };
 
 const RESET: &str = "\x1b[0m";
@@ -73,6 +73,7 @@ fn get_distro_ascii(distro: &str) -> Distro {
         "ubuntu" => ubuntu(),
         "void linux" | "void" => void(),
         "raspbian" | "raspberry pi os" => raspbian(),
+        "centos" | "centos linux" => centos(),
         _ => linux(),
     }
 }

@@ -32,6 +32,7 @@
 - Ubuntu
 - Void Linux
 - Raspbian
+- CentOS
 
 *(Other distributions will default to a generic ASCII art such as TUX.)*
 
